@@ -1,0 +1,28 @@
+version: '3.5'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:latest        
+    volumes:
+      - 'backups:/var/backups'
+      - 'data_01:/var/opt/mssql'      
+    environment:
+      - ACCEPT_EULA=Y
+      - 'SA_PASSWORD=${MSSQL_ADMIN_PWD}'
+    ports:
+      - 14331:1433
+volumes:  
+  backups:
+    driver_opts:
+      type: "nfs"
+      o: "addr=${NFS_ADDR},nolock,soft,rw"
+      device: ":${NFS_SHARE}${MSSQL_VOLUME_BKP_PATH}"     
+  data_01:
+    driver_opts:
+      type: "nfs"
+      o: "addr=${NFS_ADDR},nolock,soft,rw"
+      device: ":${NFS_SHARE}${MSSQL_VOLUME_DATA_PATH}"             
+networks:
+  default:
+    external: 
+      name: multi-host

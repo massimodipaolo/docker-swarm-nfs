@@ -1,0 +1,26 @@
+version: '3.5'
+
+services:
+  db:
+    #image: mysql:5.7
+    image: mariadb:latest    
+    volumes:
+      - 'mysql_data_01:/var/lib/mysql'      
+    environment:
+      - 'MYSQL_ROOT_PASSWORD=${MYSQL_ADMIN_PWD}'
+    ports:
+      - 33061:3306
+  adminer:
+    image: adminer:latest    
+    ports:
+      - 8081:8080  
+volumes:   
+  mysql_data_01:
+    driver_opts:
+      type: "nfs"
+      o: "addr=${NFS_ADDR},nolock,soft,rw"
+      device: ":${NFS_SHARE}${MYSQL_VOLUME_DATA_PATH}"              
+networks:
+  default:
+    external: 
+      name: multi-host
