@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 
+#env 
+export $(grep -v '^#' .env | xargs -d '\r')
+
 #mssql
-env $(cat .env | grep ^[A-Z] | xargs) docker stack deploy -c docker-compose-mssql.yml mssql
+sudo -E docker stack deploy -c docker-compose-mssql.yml mssql
 
 #mysql
-#docker stack deploy -c ./stacks/mysql/docker-compose.yml mysql
+sudo -E docker stack deploy -c docker-compose-mysql.yml mysql
 
 #monitoring
-#docker stack deploy -c ./stacks/monitoring/docker-compose.yml monitoring
+sudo -E docker stack deploy -c docker-compose-monitoring.yml monitoring
 
 #check
 #docker stack ls

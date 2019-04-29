@@ -5,7 +5,7 @@ services:
     #image: mysql:5.7
     image: mariadb:latest    
     volumes:
-      - 'mysql_data_01:/var/lib/mysql'      
+      - 'data_01:/var/lib/mysql'      
     environment:
       - 'MYSQL_ROOT_PASSWORD=${MYSQL_ADMIN_PWD}'
     ports:
@@ -15,7 +15,7 @@ services:
     ports:
       - 8081:8080  
 volumes:   
-  mysql_data_01:
+  data_01:
     driver_opts:
       type: "nfs"
       o: "addr=${NFS_ADDR},nolock,soft,rw"
