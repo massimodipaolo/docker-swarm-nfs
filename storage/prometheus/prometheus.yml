@@ -1,34 +1,45 @@
 # my global config
 global:
-  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  scrape_interval: 30s # Set the scrape interval to every 30 seconds. Default is every 1 minute.
+  evaluation_interval: 30s # Evaluate rules every 30 seconds. The default is every 1 minute.
   # scrape_timeout is set to the global default (10s).
-
 # Alertmanager configuration
 alerting:
   alertmanagers:
     - static_configs:
         - targets:
           # - alertmanager:9093
-
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
-  # - "first_rules.yml"
-  # - "second_rules.yml"
-
-# A scrape configuration containing exactly one endpoint to scrape:
-# Here it's Prometheus itself.
+  # - "first_rules.yml" - "second_rules.yml"
+# A scrape configuration containing exactly one endpoint to scrape: Here it's Prometheus itself.
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: "prometheus"
-    static_configs:
-      - targets: ["localhost:9090", "localhost:3000"]
+    dns_sd_configs:
+    - names:
+      - 'tasks.prometheus'
+      type: 'A'
+      port: 9090  
+    #static_configs:
+    #  - targets: ["localhost:9090", "grafana:3000"]
   - job_name: "host"
-    static_configs:
-      - targets: ["localhost:9100"]
+    dns_sd_configs:
+    - names:
+      - 'tasks.node-exporter'
+      type: 'A'
+      port: 9100  
+    #static_configs:
+    #  - targets: ["node-exporter:9100"]
   - job_name: "containers"
-    static_configs:
-      - targets: ["localhost:9089"]
+    dns_sd_configs:
+    - names:
+      - 'tasks.cadvisor'
+      type: 'A'
+      port: 8080  
+      #port: 9089  
+    #static_configs:
+    #  - targets: ["container01:9089","container02:9089","container03:9089"]
   - job_name: "apps"
     static_configs:
     #  - targets: ["localhost:40003"]

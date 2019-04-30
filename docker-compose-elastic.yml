@@ -1,0 +1,36 @@
+version: '3.5'
+
+services:
+  search:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.7.1    
+    volumes:      
+      - 'search:/usr/share/elasticsearch/data'          
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:      
+      - discovery.type=single-node      
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.7.1
+    volumes:      
+      - 'kibana:/usr/share/kibana/config'      
+    ports:
+      - 5601:5601        
+    environment:
+      - LOGSPOUT=ignore
+      - ELASTICSEARCH_HOSTS=http://search:9200           
+volumes:   
+  search:
+    driver_opts:
+      type: "nfs"
+      o: "addr=${NFS_ADDR},nolock,soft,rw"
+      device: ":${NFS_SHARE}${ELASTICSEARCH_VOLUME_PATH}"   
+  kibana:
+    driver_opts:
+      type: "nfs"
+      o: "addr=${NFS_ADDR},nolock,soft,rw"
+      device: ":${NFS_SHARE}${KIBANA_VOLUME_PATH}"                               
+networks:
+  default:
+    external: 
+      name: multi-host

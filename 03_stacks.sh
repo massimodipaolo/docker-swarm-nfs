@@ -9,6 +9,9 @@ sudo -E docker stack deploy -c docker-compose-mssql.yml mssql
 #mysql
 sudo -E docker stack deploy -c docker-compose-mysql.yml mysql
 
+#elastic
+#sudo -E docker stack deploy -c docker-compose-elastic.yml elastic
+
 #monitoring
 sudo -E docker stack deploy -c docker-compose-monitoring.yml monitoring
 

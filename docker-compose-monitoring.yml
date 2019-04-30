@@ -3,15 +3,24 @@ version: '3.5'
 services:
   cadvisor:
     image: google/cadvisor:latest
+    deploy:
+      mode: global
     volumes:
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
     ports:
-      - 8082:8080      
+      - 9089:8080      
   node-exporter:
     image: prom/node-exporter    
+    deploy:
+      mode: global    
+    volumes:
+      - /proc:/host/proc
+      - /sys:/host/sys
+      - /:/rootfs
+      - /etc/hostname:/etc/host_hostname    
     ports:
       - 9100:9100            
   prometheus:
@@ -22,8 +31,8 @@ services:
       - 9090:9090  
   grafana:
     image: grafana/grafana
-    volumes:      
-      - 'grafana_provisioning:/etc/grafana/provisioning'
+    volumes:            
+      - 'grafana_provisioning:/etc/grafana/provisioning'    
       - 'grafana_storage:/var/lib/grafana'
     ports:
       - 3000:3000     
