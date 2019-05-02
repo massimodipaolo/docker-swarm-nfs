@@ -20,8 +20,9 @@ sudo docker swarm join --token SWMTKN-1-1r4kfznk0txz7q1jd0w7bqfzqqj5llvq477gzaje
 sudo docker node ls
 ~~~~
 
-## Mount nas on each node (export env variables on secondary nodes if needed)
+## Mount nas on leader node, copy . in i.e. _config/swarm folder inside $NFS_MOUNT
 ~~~~
+mkdir $NFS_MOUNT
 sudo mount -t nfs4 $NFS_ADDR:$NFS_SHARE/ $NFS_MOUNT
 ~~~~
 
